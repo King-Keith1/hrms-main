@@ -20,3 +20,5 @@ ENTRYPOINT ["java", \
   "-XX:MaxRAMPercentage=75.0", \
   "-XX:TieredStopAtLevel=1", \
   "-jar", "app.jar"]
+
+  
