@@ -16,9 +16,9 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
-                "http://localhost:5173",      // React dev server (Vite)
-                "http://localhost:3000",      // React dev server (CRA)
-                "https://your-app.vercel.app" // replace with your Vercel URL after deploying
+                "http://localhost:5173",
+                "http://localhost:3000",
+                "https://hrms-frontend.vercel.app"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
