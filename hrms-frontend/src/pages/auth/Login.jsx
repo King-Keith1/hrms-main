@@ -3,6 +3,12 @@ import { useNavigate, Link } from 'react-router-dom';
 import { login } from '../../api/auth';
 import { saveAuth, decodeToken } from '../../utils/auth';
 
+const DEMO_ACCOUNTS = [
+    { label: 'Admin', username: 'demo_admin', password: 'demo123', color: '#4f46e5' },
+    { label: 'Manager', username: 'demo_manager', password: 'demo123', color: '#7c3aed' },
+    { label: 'Employee', username: 'demo_employee', password: 'demo123', color: '#0ea5e9' },
+];
+
 export default function Login() {
     const navigate = useNavigate();
     const [form, setForm] = useState({ username: '', password: '' });
@@ -13,24 +19,19 @@ export default function Login() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleLogin = async (username, password) => {
         setError('');
         setLoading(true);
-
         try {
-            const res = await login(form);
+            const res = await login({ username, password });
             const token = res.data.token;
             const decoded = decodeToken(token);
             const role = decoded?.role;
-
             saveAuth(token, role);
-
             if (role === 'ROLE_ADMIN') navigate('/admin');
             else if (role === 'ROLE_MANAGER') navigate('/manager');
             else if (role === 'ROLE_EMPLOYEE') navigate('/employee');
             else setError('Unknown role');
-
         } catch (err) {
             setError(err.response?.data?.message || 'Invalid credentials');
         } finally {
@@ -38,11 +39,41 @@ export default function Login() {
         }
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        handleLogin(form.username, form.password);
+    };
+
+    const handleDemo = (username, password) => {
+        handleLogin(username, password);
+    };
+
     return (
         <div style={styles.container}>
             <div style={styles.card}>
                 <h1 style={styles.title}>HRMS</h1>
-                <p style={styles.subtitle}>Sign in to your account</p>
+                <p style={styles.subtitle}>Human Resource Management System</p>
+
+                {/* Demo accounts */}
+                <div style={styles.demoSection}>
+                    <p style={styles.demoLabel}>Try a demo account</p>
+                    <div style={styles.demoButtons}>
+                        {DEMO_ACCOUNTS.map((acc) => (
+                            <button
+                                key={acc.username}
+                                style={{ ...styles.demoBtn, background: acc.color }}
+                                onClick={() => handleDemo(acc.username, acc.password)}
+                                disabled={loading}
+                            >
+                                {acc.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div style={styles.divider}>
+                    <span style={styles.dividerText}>or sign in manually</span>
+                </div>
 
                 {error && <div style={styles.error}>{error}</div>}
 
@@ -58,7 +89,6 @@ export default function Login() {
                             required
                         />
                     </div>
-
                     <div style={styles.field}>
                         <label style={styles.label}>Password</label>
                         <input
@@ -71,7 +101,6 @@ export default function Login() {
                             required
                         />
                     </div>
-
                     <button style={styles.button} type="submit" disabled={loading}>
                         {loading ? 'Signing in...' : 'Sign In'}
                     </button>
@@ -98,7 +127,7 @@ const styles = {
         borderRadius: '12px',
         padding: '40px',
         width: '100%',
-        maxWidth: '400px',
+        maxWidth: '420px',
         border: '1px solid #2d3748',
     },
     title: {
@@ -106,17 +135,48 @@ const styles = {
         fontSize: '1.8rem',
         fontWeight: '700',
         textAlign: 'center',
-        marginBottom: '6px',
+        marginBottom: '4px',
     },
     subtitle: {
-        color: '#94a3b8',
+        color: '#64748b',
         textAlign: 'center',
+        fontSize: '0.82rem',
         marginBottom: '28px',
-        fontSize: '0.9rem',
     },
-    field: {
-        marginBottom: '16px',
+    demoSection: {
+        marginBottom: '20px',
     },
+    demoLabel: {
+        color: '#94a3b8',
+        fontSize: '0.8rem',
+        marginBottom: '10px',
+        textAlign: 'center',
+    },
+    demoButtons: {
+        display: 'flex',
+        gap: '8px',
+    },
+    demoBtn: {
+        flex: 1,
+        padding: '10px 6px',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '8px',
+        fontSize: '0.82rem',
+        fontWeight: '600',
+        cursor: 'pointer',
+    },
+    divider: {
+        textAlign: 'center',
+        margin: '20px 0',
+        borderTop: '1px solid #2d3748',
+        paddingTop: '20px',
+    },
+    dividerText: {
+        color: '#475569',
+        fontSize: '0.78rem',
+    },
+    field: { marginBottom: '16px' },
     label: {
         display: 'block',
         color: '#94a3b8',

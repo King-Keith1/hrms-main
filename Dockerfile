@@ -21,4 +21,3 @@ ENTRYPOINT ["java", \
   "-XX:TieredStopAtLevel=1", \
   "-jar", "app.jar"]
 
-  
