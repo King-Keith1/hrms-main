@@ -54,6 +54,10 @@ public class Employee {
         this.hourlyRate = hourlyRate;
     }
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ContractType contractType = ContractType.FULL_TIME;
+
     // --- GETTERS ---
     public Long getId() {
         return id;
@@ -79,6 +83,7 @@ public class Employee {
     public User getUser() {
         return user;
     }
+    public ContractType getContractType() { return contractType; }
 
     // --- SETTERS ---
     public void setId(Long id) {
@@ -105,4 +110,5 @@ public class Employee {
     public void setUser(User user) {
         this.user = user;
     }
+    public void setContractType(ContractType contractType) { this.contractType = contractType; }
 }
