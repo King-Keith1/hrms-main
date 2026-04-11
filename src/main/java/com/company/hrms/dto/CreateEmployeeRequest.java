@@ -1,5 +1,6 @@
 package com.company.hrms.dto;
 
+import com.company.hrms.entity.ContractType;
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
@@ -21,5 +22,7 @@ public record CreateEmployeeRequest(
         @DecimalMin(value = "0.0", inclusive = false) // Must be > 0
         BigDecimal hourlyRate,
 
-        String username // Optional username for linking with a user account
+        String username, // Optional username for linking with a user account
+
+        ContractType contractType // defaults to FULL_TIME if not provided
 ) {}

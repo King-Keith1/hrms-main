@@ -3,6 +3,8 @@ package com.company.hrms.service;
 import com.company.hrms.dto.PayslipResponse;
 import com.company.hrms.entity.*;
 import com.company.hrms.repository.*;
+import com.company.hrms.service.payroll.PayrollStrategy;
+import com.company.hrms.service.payroll.PayrollStrategyFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -17,27 +19,26 @@ public class PayrollService {
     private final LeaveRepository leaveRepository;
     private final PayrollRepository payrollRepository;
     private final EmployeeRepository employeeRepository;
+    private final PayrollStrategyFactory strategyFactory;
 
     public PayrollService(AttendanceRepository attendanceRepository,
                           LeaveRepository leaveRepository,
                           PayrollRepository payrollRepository,
-                          EmployeeRepository employeeRepository) {
+                          EmployeeRepository employeeRepository,
+                          PayrollStrategyFactory strategyFactory) {
         this.attendanceRepository = attendanceRepository;
         this.leaveRepository = leaveRepository;
         this.payrollRepository = payrollRepository;
         this.employeeRepository = employeeRepository;
+        this.strategyFactory = strategyFactory;
     }
 
     public PayslipResponse generatePayroll(Long employeeId, YearMonth month) {
-
-        //Lookups employee
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("Employee not found: " + employeeId));
 
-        //Generates payroll internally
         Payroll payroll = generatePayrollInternal(employee, month);
 
-        //Return DTO for API
         return new PayslipResponse(
                 employee.getFullName(),
                 month,
@@ -46,7 +47,6 @@ public class PayrollService {
     }
 
     private Payroll generatePayrollInternal(Employee employee, YearMonth month) {
-
         String payrollMonth = month.toString();
 
         // Prevent duplicate payroll generation
@@ -57,43 +57,22 @@ public class PayrollService {
         LocalDate start = month.atDay(1);
         LocalDate end = month.atEndOfMonth();
 
-        //Get attendance within the month
+        // Attendance records
         List<Attendance> attendanceList =
                 attendanceRepository.findByEmployee_IdAndDateBetween(employee.getId(), start, end);
 
-        BigDecimal total = BigDecimal.ZERO;
+        // Approved leaves
+        List<LeaveRequest> approvedLeaves =
+                leaveRepository.findByEmployee_IdAndStatusAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                        employee.getId(), LeaveStatus.APPROVED, end, start);
 
-        //Compute pay for each attendance record
-        for (Attendance a : attendanceList) {
-            BigDecimal dailyPay = employee.getHourlyRate()
-                    .multiply(BigDecimal.valueOf(a.getHoursWorked()))
-                    .add(employee.getHourlyRate()
-                            .multiply(BigDecimal.valueOf(a.getOvertimeHours()))
-                            .multiply(BigDecimal.valueOf(1.5)) // overtime multiplier
-                    );
-            total = total.add(dailyPay);
-        }
+        // Select strategy based on contract type
+        PayrollStrategy strategy = strategyFactory.getStrategy(employee.getContractType());
 
-        //Add approved PAID leave pay
-        List<LeaveRequest> leaves = leaveRepository
-                .findByEmployee_IdAndStatusAndStartDateLessThanEqualAndEndDateGreaterThanEqual(
-                        employee.getId(),
-                        LeaveStatus.APPROVED,
-                        end,
-                        start
-                );
+        // Delegate calculation to strategy
+        BigDecimal grossPay = strategy.calculate(employee, attendanceList, approvedLeaves);
 
-        for (LeaveRequest leave : leaves) {
-            if (leave.getType() == LeaveType.PAID) {
-                long days = leave.getEndDate().toEpochDay() - leave.getStartDate().toEpochDay() + 1;
-                BigDecimal leavePay = employee.getHourlyRate()
-                        .multiply(BigDecimal.valueOf(employee.getStandardHoursPerDay() * days));
-                total = total.add(leavePay);
-            }
-        }
-
-        //Save payroll
-        Payroll payroll = new Payroll(employee, payrollMonth, total);
+        Payroll payroll = new Payroll(employee, payrollMonth, grossPay);
         return payrollRepository.save(payroll);
     }
 }

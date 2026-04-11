@@ -1,10 +1,7 @@
 package com.company.hrms.service;
 
 import com.company.hrms.dto.CreateEmployeeRequest;
-import com.company.hrms.entity.Department;
-import com.company.hrms.entity.Employee;
-import com.company.hrms.entity.Role;
-import com.company.hrms.entity.User;
+import com.company.hrms.entity.*;
 import com.company.hrms.repository.DepartmentRepository;
 import com.company.hrms.repository.EmployeeRepository;
 import com.company.hrms.repository.UserRepository;
@@ -27,15 +24,15 @@ public class EmployeeService {
 
     public Employee createEmployee(CreateEmployeeRequest request, String creatorUsername) {
 
-        //Retrieve the user performing the action
+        // Retrieve the user performing the action
         User creator = userRepository.findByUsernameIgnoreCase(creatorUsername)
                 .orElseThrow(() -> new RuntimeException("User not found: " + creatorUsername));
 
-        //Retrieve the department
+        // Retrieve the department
         Department department = departmentRepository.findById(request.departmentId())
                 .orElseThrow(() -> new RuntimeException("Department not found: " + request.departmentId()));
 
-        //Restrict managers to their own department
+        // Restrict managers to their own department
         if (creator.getRole() == Role.ROLE_MANAGER) {
             if (creator.getDepartment() == null) {
                 throw new RuntimeException("Manager has no department assigned");
@@ -45,17 +42,22 @@ public class EmployeeService {
             }
         }
 
-        //Check for duplicate employee number
+        // Check for duplicate employee number
         if (employeeRepository.findByEmployeeNumber(request.employeeNumber()).isPresent()) {
             throw new RuntimeException("Employee number already exists: " + request.employeeNumber());
         }
 
-        //Create Employee entity
+        // Create Employee entity
         Employee employee = new Employee(
                 request.fullName(),
                 request.employeeNumber(),
                 department,
                 request.hourlyRate()
+        );
+
+        // Default to FULL_TIME if not specified
+        employee.setContractType(
+                request.contractType() != null ? request.contractType() : ContractType.FULL_TIME
         );
 
         // Optionally link an existing User account if username provided
