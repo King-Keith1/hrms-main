@@ -4,9 +4,9 @@ import { login } from '../../api/auth';
 import { saveAuth, decodeToken } from '../../utils/auth';
 
 const DEMO_ACCOUNTS = [
-    { label: 'Admin', username: 'demo_admin', password: 'demo123', color: '#4f46e5' },
-    { label: 'Manager', username: 'demo_manager', password: 'demo123', color: '#7c3aed' },
-    { label: 'Employee', username: 'demo_employee', password: 'demo123', color: '#0ea5e9' },
+    { label: 'Admin', username: 'demo_admin', password: 'password', color: '#4f46e5' },
+    { label: 'Manager', username: 'demo_manager', password: 'password', color: '#7c3aed' },
+    { label: 'Employee', username: 'demo_employee', password: 'password', color: '#0ea5e9' },
 ];
 
 export default function Login() {
