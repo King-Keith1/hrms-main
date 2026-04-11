@@ -20,6 +20,7 @@ export default function Login() {
     };
 
     const handleLogin = async (username, password) => {
+        console.log('Logging in with:', username, password);
         setError('');
         setLoading(true);
         try {
