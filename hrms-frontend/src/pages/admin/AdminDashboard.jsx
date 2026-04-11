@@ -25,7 +25,9 @@ export default function AdminDashboard() {
     const [empForm, setEmpForm] = useState({
         username: '', password: '', fullName: '',
         employeeNumber: '', departmentId: 1, hourlyRate: '',
+        contractType: 'FULL_TIME',
     });
+
     const [empMsg, setEmpMsg] = useState('');
     const [empError, setEmpError] = useState('');
 
@@ -89,10 +91,11 @@ export default function AdminDashboard() {
                 departmentId: Number(empForm.departmentId),
                 hourlyRate: Number(empForm.hourlyRate),
                 username: empForm.username,
+                contractType: empForm.contractType,
             });
 
             setEmpMsg('Employee created successfully!');
-            setEmpForm({ username: '', password: '', fullName: '', employeeNumber: '', departmentId: 1, hourlyRate: '' });
+            setEmpForm({ username: '', password: '', fullName: '', employeeNumber: '', departmentId: 1, hourlyRate: '', contractType: 'FULL_TIME' });
             fetchEmployees();
         } catch (err) {
             setEmpError(err.response?.data?.message || 'Failed to create employee');
@@ -200,6 +203,15 @@ export default function AdminDashboard() {
                                     <label style={styles.label}>Hourly Rate (R)</label>
                                     <input style={styles.input} type="number" placeholder="50" value={empForm.hourlyRate}
                                            onChange={(e) => setEmpForm({ ...empForm, hourlyRate: e.target.value })} required />
+                                </div>
+                                <div style={styles.field}>
+                                    <label style={styles.label}>Contract Type</label>
+                                    <select style={styles.input} value={empForm.contractType}
+                                            onChange={(e) => setEmpForm({ ...empForm, contractType: e.target.value })}>
+                                        <option value="FULL_TIME">Full Time</option>
+                                        <option value="PART_TIME">Part Time</option>
+                                        <option value="CONTRACT">Contract</option>
+                                    </select>
                                 </div>
                                 <div style={{ ...styles.field, gridColumn: '1 / -1' }}>
                                     <button style={styles.btnPrimary} type="submit">Create Employee</button>
