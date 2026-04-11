@@ -7,19 +7,15 @@ INSERT INTO departments (name) VALUES ('Marketing') ON CONFLICT (name) DO NOTHIN
 INSERT INTO departments (name) VALUES ('Legal') ON CONFLICT (name) DO NOTHING;
 
 -- Demo users (password: demo123)
+-- Demo users (password: password)
 INSERT INTO users (username, password, role, department_id)
-VALUES ('demo_admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LKlGukSuqkO', 'ROLE_ADMIN', 1)
+VALUES ('demo_admin', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ROLE_ADMIN', 1)
     ON CONFLICT (username) DO NOTHING;
 
 INSERT INTO users (username, password, role, department_id)
-VALUES ('demo_manager', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LKlGukSuqkO', 'ROLE_MANAGER', 2)
+VALUES ('demo_manager', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ROLE_MANAGER', 2)
     ON CONFLICT (username) DO NOTHING;
 
 INSERT INTO users (username, password, role, department_id)
-VALUES ('demo_employee', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LKlGukSuqkO', 'ROLE_EMPLOYEE', 1)
+VALUES ('demo_employee', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'ROLE_EMPLOYEE', 1)
     ON CONFLICT (username) DO NOTHING;
-
-INSERT INTO employees (full_name, employee_number, department_id, hourly_rate, standard_hours_per_day, active, user_id)
-VALUES ('Demo Employee', 'EMP-DEMO', 1, 50.00, 8, true,
-        (SELECT id FROM users WHERE username = 'demo_employee'))
-    ON CONFLICT (employee_number) DO NOTHING;
