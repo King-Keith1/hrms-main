@@ -6,288 +6,167 @@
     <title>HRMS — Application Guide</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; padding: 40px 20px; }
+        h1 { text-align: center; font-size: 2rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+        .subtitle { text-align: center; color: #94a3b8; margin-bottom: 48px; font-size: 0.95rem; }
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #0f1117;
-            color: #e2e8f0;
-            padding: 40px 20px;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 6px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #94a3b8;
-            margin-bottom: 48px;
-            font-size: 0.95rem;
-        }
-
-        /* SECTION HEADERS */
-        .section {
-            max-width: 900px;
-            margin: 0 auto 60px;
-        }
-
+        .section { max-width: 900px; margin: 0 auto 60px; }
         .section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #f1f5f9;
-            margin-bottom: 24px;
-            padding-bottom: 12px;
+            font-size: 0.78rem; font-weight: 700; color: #64748b;
+            margin-bottom: 24px; padding-bottom: 12px;
             border-bottom: 1px solid #2d3748;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-size: 0.78rem;
+            text-transform: uppercase; letter-spacing: 0.08em;
         }
 
-        /* ROLE CARDS */
-        .role-grid {
+        /* DEMO ACCOUNTS */
+        .demo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 16px;
-            margin-bottom: 48px;
             max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto 48px;
         }
-
-        .role-card {
+        .demo-card {
             border-radius: 12px;
             padding: 20px;
             border: 1px solid transparent;
         }
-
-        .role-card h3 {
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .role-card ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .role-card ul li {
-            font-size: 0.82rem;
-            color: #94a3b8;
-            padding: 4px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .role-card ul li:last-child { border-bottom: none; }
-
-        .admin-card   { background: #1a1040; border-color: #4f46e5; }
+        .demo-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; }
+        .demo-card .cred { font-family: monospace; font-size: 0.82rem; color: #94a3b8; margin-bottom: 4px; }
+        .demo-card .access { font-size: 0.78rem; color: #64748b; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); }
+        .admin-card { background: #1a1040; border-color: #4f46e5; }
         .admin-card h3 { color: #818cf8; }
         .manager-card { background: #1a1533; border-color: #7c3aed; }
         .manager-card h3 { color: #a78bfa; }
         .employee-card { background: #0f1f2e; border-color: #0ea5e9; }
         .employee-card h3 { color: #38bdf8; }
 
-        /* FLOW STEPS */
-        .flow {
-            max-width: 900px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .step {
-            width: 100%;
-            border-radius: 12px;
-            padding: 18px 22px;
-            border: 1px solid transparent;
-            transition: transform 0.15s;
-            margin-bottom: 4px;
-        }
-
-        .step:hover { transform: translateX(4px); }
-
-        .step-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 6px;
-        }
-
-        .step-number {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .step-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #f1f5f9;
-            flex: 1;
-        }
-
-        .step-badge {
-            font-size: 0.68rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            padding: 3px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            flex-shrink: 0;
-        }
-
-        .step-desc {
-            font-size: 0.83rem;
-            color: #94a3b8;
-            margin-left: 40px;
-            line-height: 1.5;
-        }
-
-        .step-body {
-            margin-left: 40px;
-            margin-top: 10px;
-        }
-
-        .code-block {
-            background: #0f1117;
-            border-radius: 8px;
-            padding: 12px 14px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.78rem;
-            color: #7dd3fc;
-            line-height: 1.6;
-            white-space: pre;
-            overflow-x: auto;
-            border: 1px solid #2d3748;
-        }
-
-        .tip {
-            margin-top: 8px;
-            font-size: 0.78rem;
-            color: #fbbf24;
-        }
-
-        .arrow {
-            width: 2px;
-            height: 24px;
-            background: #2d3748;
-            margin: 0 auto;
-        }
-
-        .public   { background: #0f2a1f; border-color: #166534; }
-        .public .step-number { background: #166534; color: #bbf7d0; }
-        .public .step-badge  { background: #166534; color: #bbf7d0; }
-
-        .admin-step { background: #1a1040; border-color: #4f46e5; }
-        .admin-step .step-number { background: #4f46e5; color: #e0e7ff; }
-        .admin-step .step-badge  { background: #4f46e5; color: #e0e7ff; }
-
-        .manager-step { background: #1a1533; border-color: #7c3aed; }
-        .manager-step .step-number { background: #7c3aed; color: #ede9fe; }
-        .manager-step .step-badge  { background: #7c3aed; color: #ede9fe; }
-
-        .employee-step { background: #0f1f2e; border-color: #0ea5e9; }
-        .employee-step .step-number { background: #0ea5e9; color: #e0f2fe; }
-        .employee-step .step-badge  { background: #0ea5e9; color: #e0f2fe; }
-
-        .system-step { background: #1f1510; border-color: #d97706; }
-        .system-step .step-number { background: #d97706; color: #fef3c7; }
-        .system-step .step-badge  { background: #d97706; color: #fef3c7; }
-
-        /* DASHBOARD GUIDE */
-        .dashboard-grid {
+        /* STRATEGY PATTERN */
+        .strategy-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 16px;
             max-width: 900px;
-            margin: 0 auto;
+            margin: 0 auto 48px;
         }
-
-        .dashboard-card {
+        .strategy-card {
             border-radius: 12px;
             padding: 20px;
-            border: 1px solid transparent;
+            border: 1px solid #2d3748;
+            background: #1e2433;
         }
+        .strategy-card h3 { font-size: 0.95rem; font-weight: 700; color: #f1f5f9; margin-bottom: 12px; }
+        .strategy-card .formula { font-family: monospace; font-size: 0.78rem; color: #7dd3fc; line-height: 1.6; }
+        .strategy-card .example { font-size: 0.78rem; color: #86efac; margin-top: 10px; padding-top: 10px; border-top: 1px solid #2d3748; }
 
-        .dashboard-card h3 {
-            font-size: 0.95rem;
-            font-weight: 700;
-            margin-bottom: 14px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
+        /* ROLE CARDS */
+        .role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; max-width: 900px; margin: 0 auto 48px; }
+        .role-card { border-radius: 12px; padding: 20px; border: 1px solid transparent; }
+        .role-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; }
+        .role-card ul { list-style: none; }
+        .role-card ul li { font-size: 0.82rem; color: #94a3b8; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .role-card ul li:last-child { border-bottom: none; }
 
-        .tab-item {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            font-size: 0.82rem;
-        }
+        /* FLOW */
+        .flow { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; }
+        .step { width: 100%; border-radius: 12px; padding: 18px 22px; border: 1px solid transparent; transition: transform 0.15s; margin-bottom: 4px; }
+        .step:hover { transform: translateX(4px); }
+        .step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .step-number { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+        .step-title { font-size: 0.95rem; font-weight: 600; color: #f1f5f9; flex: 1; }
+        .step-badge { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; flex-shrink: 0; }
+        .step-desc { font-size: 0.83rem; color: #94a3b8; margin-left: 40px; line-height: 1.5; }
+        .step-body { margin-left: 40px; margin-top: 10px; }
+        .code-block { background: #0f1117; border-radius: 8px; padding: 12px 14px; font-family: 'Courier New', monospace; font-size: 0.78rem; color: #7dd3fc; line-height: 1.6; white-space: pre; overflow-x: auto; border: 1px solid #2d3748; }
+        .tip { margin-top: 8px; font-size: 0.78rem; color: #fbbf24; }
+        .arrow { width: 2px; height: 24px; background: #2d3748; margin: 0 auto; }
 
-        .tab-item:last-child { border-bottom: none; }
+        .public { background: #0f2a1f; border-color: #166534; }
+        .public .step-number { background: #166534; color: #bbf7d0; }
+        .public .step-badge { background: #166534; color: #bbf7d0; }
+        .admin-step { background: #1a1040; border-color: #4f46e5; }
+        .admin-step .step-number { background: #4f46e5; color: #e0e7ff; }
+        .admin-step .step-badge { background: #4f46e5; color: #e0e7ff; }
+        .manager-step { background: #1a1533; border-color: #7c3aed; }
+        .manager-step .step-number { background: #7c3aed; color: #ede9fe; }
+        .manager-step .step-badge { background: #7c3aed; color: #ede9fe; }
+        .employee-step { background: #0f1f2e; border-color: #0ea5e9; }
+        .employee-step .step-number { background: #0ea5e9; color: #e0f2fe; }
+        .employee-step .step-badge { background: #0ea5e9; color: #e0f2fe; }
+        .system-step { background: #1f1510; border-color: #d97706; }
+        .system-step .step-number { background: #d97706; color: #fef3c7; }
+        .system-step .step-badge { background: #d97706; color: #fef3c7; }
 
-        .tab-name {
-            font-weight: 600;
-            color: #f1f5f9;
-            margin-bottom: 3px;
-        }
-
-        .tab-desc {
-            color: #64748b;
-            font-size: 0.78rem;
-        }
-
-        .legend {
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            flex-wrap: wrap;
-            margin-bottom: 40px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.82rem;
-            color: #94a3b8;
-        }
-
-        .legend-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        footer {
-            text-align: center;
-            margin-top: 60px;
-            font-size: 0.78rem;
-            color: #475569;
-        }
+        .legend { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin-bottom: 40px; }
+        .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #94a3b8; }
+        .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+        footer { text-align: center; margin-top: 60px; font-size: 0.78rem; color: #475569; }
     </style>
 </head>
 <body>
 
 <h1>HRMS Application Guide</h1>
-<p class="subtitle">How to use the Human Resource Management System</p>
+<p class="subtitle">Human Resource Management System — Testing and Usage Guide</p>
 
-<!-- ROLES OVERVIEW -->
+<!-- DEMO ACCOUNTS -->
+<div class="section">
+    <div class="section-title">Demo Accounts — No Registration Required</div>
+    <div class="demo-grid">
+        <div class="demo-card admin-card">
+            <h3>Admin</h3>
+            <div class="cred">Username: demo_admin</div>
+            <div class="cred">Password: password</div>
+            <div class="access">Full system access — manage all employees, approve leave, generate payroll across all departments</div>
+        </div>
+        <div class="demo-card manager-card">
+            <h3>Manager</h3>
+            <div class="cred">Username: demo_manager</div>
+            <div class="cred">Password: password</div>
+            <div class="access">Department-scoped access — view own department employees, approve leave, generate payroll</div>
+        </div>
+        <div class="demo-card employee-card">
+            <h3>Employee</h3>
+            <div class="cred">Username: demo_employee</div>
+            <div class="cred">Password: password</div>
+            <div class="access">Limited access — mark daily attendance and submit leave requests only</div>
+        </div>
+    </div>
+</div>
+
+<!-- STRATEGY PATTERN -->
+<div class="section">
+    <div class="section-title">Payroll Strategy Pattern — Contract Types</div>
+    <div class="strategy-grid">
+        <div class="strategy-card">
+            <h3>Full Time</h3>
+            <div class="formula">Regular = hourlyRate x hours
+                Overtime = hourlyRate x OT x 1.5
+                Leave = hourlyRate x 8 x leaveDays
+                Gross = regular + overtime + leave</div>
+            <div class="example">10hrs x R50 = R550/day (includes R150 overtime)</div>
+        </div>
+        <div class="strategy-card">
+            <h3>Part Time</h3>
+            <div class="formula">Gross = hourlyRate x hoursWorked
+                (no overtime, no paid leave)</div>
+            <div class="example">10hrs x R50 = R500/day (no overtime bonus)</div>
+        </div>
+        <div class="strategy-card">
+            <h3>Contract</h3>
+            <div class="formula">Daily Rate = hourlyRate x 8
+                Gross = dailyRate x daysWorked
+                (flat rate regardless of hours)</div>
+            <div class="example">R50 x 8 = R400/day flat rate</div>
+        </div>
+    </div>
+</div>
+
+<!-- ROLES -->
 <div class="section">
     <div class="section-title">User Roles</div>
     <div class="role-grid">
         <div class="role-card admin-card">
-            <h3>Admin</h3>
+            <h3 style="color:#818cf8">Admin</h3>
             <ul>
                 <li>Create and manage all employees</li>
                 <li>View employees across all departments</li>
@@ -298,7 +177,7 @@
             </ul>
         </div>
         <div class="role-card manager-card">
-            <h3>Manager</h3>
+            <h3 style="color:#a78bfa">Manager</h3>
             <ul>
                 <li>View employees in their department only</li>
                 <li>Approve leave requests</li>
@@ -308,7 +187,7 @@
             </ul>
         </div>
         <div class="role-card employee-card">
-            <h3>Employee</h3>
+            <h3 style="color:#38bdf8">Employee</h3>
             <ul>
                 <li>Mark daily attendance</li>
                 <li>Submit leave requests</li>
@@ -318,74 +197,9 @@
     </div>
 </div>
 
-<!-- DASHBOARD GUIDE -->
-<div class="section">
-    <div class="section-title">Dashboard Guide</div>
-    <div class="dashboard-grid">
-
-        <div class="dashboard-card admin-step">
-            <h3 style="color:#818cf8">Admin Dashboard</h3>
-            <div class="tab-item">
-                <div class="tab-name">Employees Tab</div>
-                <div class="tab-desc">Create new employees and view all employees across departments</div>
-            </div>
-            <div class="tab-item">
-                <div class="tab-name">Leaves Tab</div>
-                <div class="tab-desc">View all leave requests and approve pending ones</div>
-            </div>
-            <div class="tab-item">
-                <div class="tab-name">Attendance Tab</div>
-                <div class="tab-desc">Enter an employee ID to view their attendance records</div>
-            </div>
-            <div class="tab-item">
-                <div class="tab-name">Payroll Tab</div>
-                <div class="tab-desc">Generate monthly payroll and view all payroll records</div>
-            </div>
-        </div>
-
-        <div class="dashboard-card manager-step">
-            <h3 style="color:#a78bfa">Manager Dashboard</h3>
-            <div class="tab-item">
-                <div class="tab-name">My Department Tab</div>
-                <div class="tab-desc">View employees in your department only</div>
-            </div>
-            <div class="tab-item">
-                <div class="tab-name">Leaves Tab</div>
-                <div class="tab-desc">View and approve pending leave requests</div>
-            </div>
-            <div class="tab-item">
-                <div class="tab-name">Attendance Tab</div>
-                <div class="tab-desc">Enter an employee ID to view their attendance</div>
-            </div>
-            <div class="tab-item">
-                <div class="tab-name">Payroll Tab</div>
-                <div class="tab-desc">Generate and view payroll for your department</div>
-            </div>
-        </div>
-
-        <div class="dashboard-card employee-step">
-            <h3 style="color:#38bdf8">Employee Dashboard</h3>
-            <div class="tab-item">
-                <div class="tab-name">Mark Attendance</div>
-                <div class="tab-desc">Enter hours worked today and submit. Hours over 8 count as overtime at 1.5x rate</div>
-            </div>
-            <div class="tab-item">
-                <div class="tab-name">Request Leave</div>
-                <div class="tab-desc">Select start date, end date, and type (Paid or Unpaid)</div>
-            </div>
-            <div class="tab-item">
-                <div class="tab-name">My Leave Requests</div>
-                <div class="tab-desc">View all submitted leave requests and their approval status</div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
 <!-- TESTING FLOW -->
 <div class="section">
     <div class="section-title">Step-by-Step Testing Flow</div>
-
     <div class="legend">
         <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div>Public</div>
         <div class="legend-item"><div class="legend-dot" style="background:#4f46e5"></div>Admin</div>
@@ -399,46 +213,33 @@
         <div class="step public">
             <div class="step-header">
                 <div class="step-number">1</div>
-                <div class="step-title">Register an Admin account</div>
+                <div class="step-title">Login using a demo account</div>
                 <div class="step-badge">Public</div>
             </div>
-            <div class="step-desc">Go to the Register page and create an Admin user.</div>
+            <div class="step-desc">Go to the login page and click one of the demo buttons — Admin, Manager, or Employee. No registration required.</div>
             <div class="step-body">
-                <div class="code-block">Username:     admin1
-                    Password:     admin123
-                    Role:         Admin
-                    Department:   Human Resources</div>
+                <div class="tip">Start with Admin to explore the full system first.</div>
             </div>
-        </div>
-
-        <div class="arrow"></div>
-
-        <div class="step public">
-            <div class="step-header">
-                <div class="step-number">2</div>
-                <div class="step-title">Login as Admin</div>
-                <div class="step-badge">Public</div>
-            </div>
-            <div class="step-desc">Login with the admin credentials. You will be redirected to the Admin Dashboard.</div>
         </div>
 
         <div class="arrow"></div>
 
         <div class="step admin-step">
             <div class="step-header">
-                <div class="step-number">3</div>
+                <div class="step-number">2</div>
                 <div class="step-title">Create an Employee — Employees Tab</div>
                 <div class="step-badge">Admin</div>
             </div>
-            <div class="step-desc">In the Employees tab, fill in all fields to create a new employee and their linked user account in one step.</div>
+            <div class="step-desc">In the Admin Dashboard, go to the Employees tab and create a new employee. The user account and employee record are created together in one step.</div>
             <div class="step-body">
                 <div class="code-block">Full Name:        John Doe
                     Employee Number:  EMP001
                     Username:         johndoe
                     Password:         john123
                     Department:       Human Resources
-                    Hourly Rate:      50</div>
-                <div class="tip">The employee record and user account are created together automatically.</div>
+                    Hourly Rate:      50
+                    Contract Type:    Full Time</div>
+                <div class="tip">Try creating another employee with Contract Type set to Part Time to compare payroll later.</div>
             </div>
         </div>
 
@@ -446,31 +247,25 @@
 
         <div class="step public">
             <div class="step-header">
-                <div class="step-number">4</div>
-                <div class="step-title">Register a Manager account</div>
+                <div class="step-number">3</div>
+                <div class="step-title">Login as the Employee</div>
                 <div class="step-badge">Public</div>
             </div>
-            <div class="step-desc">Go to the Register page and create a Manager user in the same department.</div>
-            <div class="step-body">
-                <div class="code-block">Username:     manager1
-                    Password:     manager123
-                    Role:         Manager
-                    Department:   Human Resources</div>
-            </div>
+            <div class="step-desc">Logout and login with the employee credentials you just created, or use the demo Employee button.</div>
         </div>
 
         <div class="arrow"></div>
 
         <div class="step employee-step">
             <div class="step-header">
-                <div class="step-number">5</div>
-                <div class="step-title">Login as Employee and mark attendance</div>
+                <div class="step-number">4</div>
+                <div class="step-title">Mark Attendance</div>
                 <div class="step-badge">Employee</div>
             </div>
-            <div class="step-desc">Logout of the admin account. Login as johndoe. On the Employee Dashboard, enter hours worked and click Mark Attendance.</div>
+            <div class="step-desc">On the Employee Dashboard, enter hours worked today and click Mark Attendance.</div>
             <div class="step-body">
-                <div class="code-block">Hours Worked: 9  (8 regular + 1 overtime)</div>
-                <div class="tip">You can only mark attendance once per system date. Use Next Day to advance the date.</div>
+                <div class="code-block">Hours Worked: 10  (8 regular + 2 overtime)</div>
+                <div class="tip">Hours above 8 are automatically recorded as overtime and paid at 1.5x for Full Time employees.</div>
             </div>
         </div>
 
@@ -478,25 +273,25 @@
 
         <div class="step system-step">
             <div class="step-header">
-                <div class="step-number">6</div>
-                <div class="step-title">Advance the system date</div>
+                <div class="step-number">5</div>
+                <div class="step-title">Advance the System Date</div>
                 <div class="step-badge">System</div>
             </div>
-            <div class="step-desc">Click the Next Day button in the navbar to advance the system clock. Repeat steps 5 and 6 a few times to build up attendance data.</div>
+            <div class="step-desc">Login as Admin or Manager and click the Next Day button in the navbar. The current system date updates instantly. Repeat steps 4 and 5 a few times to build up attendance data.</div>
         </div>
 
         <div class="arrow"></div>
 
         <div class="step employee-step">
             <div class="step-header">
-                <div class="step-number">7</div>
-                <div class="step-title">Request leave as Employee</div>
+                <div class="step-number">6</div>
+                <div class="step-title">Request Leave</div>
                 <div class="step-badge">Employee</div>
             </div>
-            <div class="step-desc">Still logged in as johndoe, submit a leave request.</div>
+            <div class="step-desc">As the employee, submit a paid leave request.</div>
             <div class="step-body">
-                <div class="code-block">Start Date:  2026-04-01
-                    End Date:    2026-04-03
+                <div class="code-block">Start Date:  2026-05-01
+                    End Date:    2026-05-03
                     Type:        Paid</div>
             </div>
         </div>
@@ -505,26 +300,26 @@
 
         <div class="step admin-step">
             <div class="step-header">
-                <div class="step-number">8</div>
-                <div class="step-title">Approve leave as Admin or Manager</div>
+                <div class="step-number">7</div>
+                <div class="step-title">Approve Leave</div>
                 <div class="step-badge">Admin</div>
             </div>
-            <div class="step-desc">Login as admin1 or manager1. Go to the Leaves tab and click Approve on the pending request.</div>
+            <div class="step-desc">Login as Admin or Manager. Go to the Leaves tab and click Approve on the pending request.</div>
         </div>
 
         <div class="arrow"></div>
 
         <div class="step admin-step">
             <div class="step-header">
-                <div class="step-number">9</div>
+                <div class="step-number">8</div>
                 <div class="step-title">Generate Payroll</div>
                 <div class="step-badge">Admin</div>
             </div>
-            <div class="step-desc">Go to the Payroll tab. Enter the employee ID and select the month to generate payroll. Gross pay is calculated from attendance records and approved paid leave.</div>
+            <div class="step-desc">Go to the Payroll tab. Enter the employee ID and month to generate payroll. The system uses the Strategy Pattern to calculate gross pay based on the employee's contract type.</div>
             <div class="step-body">
                 <div class="code-block">Employee ID:  1
-                    Month:        2026-03</div>
-                <div class="tip">Payroll can only be generated once per employee per month.</div>
+                    Month:        2026-04</div>
+                <div class="tip">Compare payroll for a Full Time vs Part Time employee with the same hours — Full Time will be higher due to overtime pay.</div>
             </div>
         </div>
 
@@ -532,18 +327,18 @@
 
         <div class="step manager-step">
             <div class="step-header">
-                <div class="step-number">10</div>
-                <div class="step-title">Test Manager Dashboard</div>
+                <div class="step-number">9</div>
+                <div class="step-title">Test the Manager Dashboard</div>
                 <div class="step-badge">Manager</div>
             </div>
-            <div class="step-desc">Login as manager1. Notice the Manager Dashboard only shows employees from their department and has a department label in the header.</div>
+            <div class="step-desc">Login using the Manager demo button. Notice the Manager Dashboard only shows employees from their own department and displays a department label in the header.</div>
         </div>
 
     </div>
 </div>
 
 <footer>
-    HRMS — Human Resource Management System &nbsp;·&nbsp; Spring Boot 4 + React &nbsp;·&nbsp; PostgreSQL
+    HRMS — Human Resource Management System &nbsp;·&nbsp; Spring Boot 4 + React &nbsp;·&nbsp; PostgreSQL &nbsp;·&nbsp; Strategy Pattern
 </footer>
 
 </body>

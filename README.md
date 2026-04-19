@@ -9,7 +9,21 @@ The system solves the following real business problems:
 - **Employee management** — HR admins and managers can onboard new employees and assign them to departments
 - **Attendance tracking** — Employees clock in daily by marking their hours worked, including overtime
 - **Leave management** — Employees submit leave requests which managers or admins can approve
-- **Payroll calculation** — The system automatically calculates gross pay based on actual attendance records and approved paid leave, with overtime paid at 1.5x the hourly rate
+- **Payroll calculation** — The system automatically calculates gross pay based on actual attendance records and approved paid leave, using the Strategy Pattern to handle different contract types
+
+---
+
+## Live Demo
+
+**Frontend:** https://hrms-main-self.vercel.app
+
+Use the one-click demo buttons on the login page — no registration required:
+
+| Button | Username | Password | Access |
+|--------|----------|----------|--------|
+| Admin | demo_admin | password | Full system access |
+| Manager | demo_manager | password | Department-scoped access |
+| Employee | demo_employee | password | Attendance and leave only |
 
 ---
 
@@ -20,11 +34,11 @@ The system solves the following real business problems:
 |------------|---------|
 | Java 17 | Language |
 | Spring Boot 4 | Framework |
-| Spring Security 7 | Authentication & Authorization |
+| Spring Security 7 | Authentication and Authorization |
 | JWT (jjwt 0.11.5) | Stateless token-based auth |
 | PostgreSQL | Database |
 | Hibernate / JPA | ORM |
-| springdoc-openapi 2.8.5 | Swagger UI & API docs |
+| springdoc-openapi 2.8.5 | Swagger UI and API docs |
 | BCrypt | Password hashing |
 | Maven | Build tool |
 
@@ -38,6 +52,43 @@ The system solves the following real business problems:
 
 ---
 
+## Architecture & Design Patterns
+
+### Strategy Pattern — Payroll Calculation
+
+The payroll system uses the Strategy Pattern to handle different contract types without modifying existing logic. Each contract type has its own strategy class, and the `PayrollStrategyFactory` selects the correct one at runtime.
+
+```
+PayrollStrategy (interface)
+├── FullTimePayrollStrategy   — regular pay + overtime at 1.5x + paid leave
+├── PartTimePayrollStrategy   — hours worked only, no overtime, no paid leave
+└── ContractPayrollStrategy   — flat daily rate regardless of hours worked
+```
+
+The rationale: adding a new contract type in the future means adding a new class, not modifying existing payroll logic. This follows the Open/Closed Principle — open for extension, closed for modification.
+
+### Payroll Calculation by Contract Type
+
+**Full Time:**
+```
+Regular pay  = hourlyRate x hoursWorked
+Overtime pay = hourlyRate x overtimeHours x 1.5
+Leave pay    = hourlyRate x standardHoursPerDay x paidLeaveDays
+Gross Pay    = regular + overtime + leave
+```
+
+**Part Time:**
+```
+Gross Pay = hourlyRate x hoursWorked (no overtime, no leave pay)
+```
+
+**Contract:**
+```
+Gross Pay = hourlyRate x 8 x daysWorked (flat daily rate)
+```
+
+---
+
 ## Business Rules
 
 ### Roles
@@ -47,23 +98,10 @@ The system solves the following real business problems:
 | `ROLE_MANAGER` | Can view and manage employees within their own department, approve leave, generate payroll |
 | `ROLE_EMPLOYEE` | Can mark their own attendance and submit leave requests |
 
-### Payroll Calculation
-```
-For each working day:
-  Regular pay  = hourlyRate x hoursWorked
-  Overtime pay = hourlyRate x overtimeHours x 1.5
-
-For approved paid leave days:
-  Leave pay = hourlyRate x standardHoursPerDay x leaveDays
-
-Gross Pay = Sum of all regular pay + overtime pay + paid leave pay
-```
-
-Overtime is any hours worked beyond the employee's standard hours per day (default 8 hours).
-
 ### Attendance Rules
-- An employee can only mark attendance once per day
+- An employee can only mark attendance once per system date
 - Hours worked must be greater than 0
+- Overtime is automatically calculated for hours beyond 8
 
 ### Leave Rules
 - End date cannot be before start date
@@ -84,7 +122,14 @@ src/main/java/com/company/hrms/
 ├── exception/                     # Global exception handler
 ├── repository/                    # Spring Data JPA repositories
 ├── security/                      # JWT filter, service, and security config
-└── service/                       # Business logic services
+└── service/
+    ├── payroll/                   # Strategy Pattern implementation
+    │   ├── PayrollStrategy.java           # Strategy interface
+    │   ├── FullTimePayrollStrategy.java   # Full time calculation
+    │   ├── PartTimePayrollStrategy.java   # Part time calculation
+    │   ├── ContractPayrollStrategy.java   # Contract calculation
+    │   └── PayrollStrategyFactory.java    # Selects correct strategy
+    └── ...                        # Other business logic services
 
 frontend/
 src/
@@ -127,7 +172,7 @@ spring.datasource.password=YOUR_PASSWORD
 mvn spring-boot:run
 ```
 
-The application will auto-create all tables and seed departments on first run.
+The application will auto-create all tables and seed departments and demo accounts on first run.
 
 **4. Access Swagger UI**
 ```
@@ -162,7 +207,9 @@ For production set these environment variables:
 |----------|-------------|
 | `JWT_SECRET` | Secret key for signing JWT tokens (min 32 chars) |
 | `JWT_EXPIRATION` | Token expiry in milliseconds (default 86400000 = 24h) |
-| `DATABASE_URL` | PostgreSQL connection URL |
+| `DB_HOST` | PostgreSQL host |
+| `DB_PORT` | PostgreSQL port |
+| `DB_NAME` | Database name |
 | `DATABASE_USERNAME` | Database username |
 | `DATABASE_PASSWORD` | Database password |
 
@@ -216,8 +263,8 @@ For production set these environment variables:
 
 ## Deployment
 
-- **Backend** — deployed on Render as a web service
-- **Frontend** — deployed on Vercel
+- **Backend** — Render (Docker web service)
+- **Frontend** — Vercel
 - **Database** — Render PostgreSQL
 
 ---
